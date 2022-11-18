@@ -1,0 +1,16 @@
+[package]
+name = "duro_os"
+version = "0.1.0"
+authors = ["cegargo <clintegargo@proton.me>"]
+edition="2018"
+
+[profile.dev]
+panic = "abort"
+
+
+[profile.release]
+panic = "abort"
+
+
+[dependencies]
+bootloader = "0.9.18"
