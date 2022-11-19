@@ -2,23 +2,27 @@
 #![no_main]
 
 use core::panic::PanicInfo;
-
-static MESSAGE: &[u8] = b"duroOS. Made with Rust (Super+Q to exit.)";
+use crate::vga::print_characters;
+mod vga;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    let vga_buffer = 0xb8000 as *mut u8;
-    for (i, &byte) in MESSAGE.iter().enumerate() {
-        unsafe {
-            *vga_buffer.offset(i as isize * 2) = byte;
-            *vga_buffer.offset(i as isize * 2 + 1) = 0xb;
-        }
-    }
-    loop{}
+    println!("duroOS\n\n\n");
+    println!("Made with Rust. Super+Q or Ctrl+Alt+Q to exit.\n\n");
+    print_characters();
+    loop {}
 }
 
-
 #[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
     loop {}
+}
+
+#[cfg(test)]
+fn test_runner(tests: &[&dyn Fn()]) {
+    println!("Running {} tests", tests.len());
+    for test in tests {
+        test();
+    }
 }
